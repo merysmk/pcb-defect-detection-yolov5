@@ -25,6 +25,8 @@ inspections/
 inspection/
 captures_pcb/
 images/
+yolov5/
+XmlToTxt/
 
 # YOLO / training outputs
 **/runs/
