@@ -38,6 +38,7 @@ results*.csv
 
 # Model weights and exports
 *.pt
+!best.pt
 *.pth
 *.weights
 *.onnx

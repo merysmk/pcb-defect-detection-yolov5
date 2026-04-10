@@ -1,16 +1,19 @@
 # ===================== FULL SCRIPT: Stable YOLOv5 + Auto Export + HTML Report + LATEST JSON =====================
 # Requirements:
-#   pip install opencv-python torch numpy
-#trained weights: best.pt
+#   pip install -r requirements.txt
+# Trained weights: best.pt
 
 import pathlib
-pathlib.PosixPath = pathlib.WindowsPath
-
 import os
 import json
 import datetime
 import time
 from collections import deque, Counter
+
+if os.name == "nt":
+    pathlib.PosixPath = pathlib.WindowsPath
+else:
+    pathlib.WindowsPath = pathlib.PosixPath
 
 import cv2
 import torch
@@ -18,7 +21,7 @@ import numpy as np
 
 
 # --------------------------- CONFIG ---------------------------
-WEIGHTS_PATH = "best.pt"
+WEIGHTS_PATH = os.environ.get("WEIGHTS_PATH", "best.pt")
 
 # YOLO thresholds
 YOLO_CONF = 0.5
@@ -32,7 +35,7 @@ FRAME_H = 720
 
 # Tracking / stability
 IOU_THRESH = 0.35
-CONFIRM_STREAK = 4      # frames CONSÉCUTIVES to confirm
+CONFIRM_STREAK = 4      # consecutive frames to confirm
 MAX_MISS = 8            # remove track after this many missed frames
 HOLD_TIME = 0.35        # seconds to keep drawing after losing a detection briefly
 ALPHA_BOX = 0.35        # EMA smoothing for bbox
@@ -218,7 +221,8 @@ def export_inspection(output_root, frame_bgr, confirmed_tracks):
 
 # --------------------------- MAIN ---------------------------
 def main():
-    cap = cv2.VideoCapture(CAM_INDEX, cv2.CAP_DSHOW)
+    camera_backend = cv2.CAP_DSHOW if os.name == "nt" else cv2.CAP_ANY
+    cap = cv2.VideoCapture(CAM_INDEX, camera_backend)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, FRAME_W)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, FRAME_H)
 
@@ -315,7 +319,7 @@ def main():
             if last_frame is None:
                 last_frame = display.copy()
 
-            #  CHANGEMENT UNIQUE: exporter l'image annotée (display), pas l'image brute (last_frame)
+            # Export the annotated image (display), not the raw image (last_frame).
             folder, payload = export_inspection(OUTPUT_ROOT, display, confirmed)
 
             # NEW: Update LATEST IMAGE for Unity (fixed file)
