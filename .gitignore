@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.ipynb_checkpoints/
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+.env
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Local datasets and photos
+inspections/
+inspection/
+captures_pcb/
+images/
+
+# YOLO / training outputs
+**/runs/
+**/wandb/
+**/mlruns/
+**/labels.cache
+**/*.cache
+results*.csv
+
+# Model weights and exports
+*.pt
+*.pth
+*.weights
+*.onnx
+*.engine
+*.pb
+*.tflite
+*.torchscript
+*.mlmodel
+*.mlpackage
+*_saved_model/
+*_openvino_model/
+*_paddle_model/
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+*.bak
+*.orig
